@@ -5,6 +5,10 @@ public class MemberDTO {
 	private String nick; //닉네임
 	private String pw; //비번
 	
+	public MemberDTO(){
+		
+	}
+	
 	public MemberDTO(String nick, String pw) {
 		this.nick = nick;
 		this.pw = pw;
