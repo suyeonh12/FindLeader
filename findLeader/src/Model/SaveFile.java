@@ -1,6 +1,6 @@
 package Model;
 
-public class Savefile{
+public class SaveFile{
 	
 	private int stageNum;
 	private int saveScore;

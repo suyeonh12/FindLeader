@@ -67,7 +67,7 @@ public class Main {
 				}
 			} while (true);
 
-			int score = 0; // 게임점수!
+			int score = 100; // 나의 HP
 
 			// 게임1 시작(스마트인재개발원, 팀장의 가장 친한 친구 찾기)
 			System.out.println("팀장.. 누구한테 물어봐야하지? 누구랑 친했더라...");
@@ -132,7 +132,7 @@ public class Main {
 	                    System.out.println("\n시간 초과! 다음 힌트로 넘어갑니다.");
 	                } else if (answer.equals(correctFriend.getName())) {
 	                    points = 10 - hintIndex * 2;
-	                    System.out.println("정답입니다! 점수: " + points + "점");
+	                    System.out.println("정답입니다! HP: " + points);
 	                    isCorrect = true;
 	                    break;
 	                } else {
@@ -149,13 +149,13 @@ public class Main {
 	            }
 
 	            System.out.println("\n게임 종료!");
-	            System.out.println("최종 점수: " + points + "점");
+	            System.out.println("남은 HP: " + points);
 
-	            try {
-	                br.close();
-	            } catch (IOException e) {
-	                e.printStackTrace();
-	            }
+//	            try {
+//	                br.close();
+//	            } catch (IOException e) {
+//	                e.printStackTrace();
+//	            }
 
 			// 게임2 시작(가장친한친구와 가위바위보 -> 이기면 회사로, 지면 집으로 ? )
 			System.out.println("게임 2 시작");
@@ -172,8 +172,7 @@ public class Main {
 	    	for(int round = 1; round <= 3; round++) {
 	    		System.out.println("-------"+round+ "번 째 판 -------");
 	    		System.out.println("안내면 진다 가위, 바위, 보~!");
-	        	
-	    		String myChoice = sc.nextLine();
+	    		String myChoice = sc.next(); // 사용자 입력 받기
 	        	String opponentChoice = choices[ran.nextInt(3)];
 	        	System.out.println("친구의 선택 : "+ opponentChoice);
 	        	
