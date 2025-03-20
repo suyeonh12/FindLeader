@@ -2,7 +2,7 @@ package Model;
 
 public class MemberDTO {
 	//회원정보
-	private String nick; //닉네임
+	private static String nick; //닉네임
 	private String pw; //비번
 	
 	public MemberDTO(){
@@ -26,5 +26,8 @@ public class MemberDTO {
 		this.pw = pw;
 	}
 	
-	
+//	public static String gamenick;
+//	
+//	
+//	
 }
