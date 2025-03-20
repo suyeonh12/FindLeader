@@ -1,14 +1,18 @@
 package Model;
+import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 
-public class Ranking {
+public class Ranking extends MemberDAO {
 	private int endScore;
-<<<<<<< HEAD
 	private String endTime;
 	
 	public Ranking(String nick, int score, String endtime) {
-		dto.setNick(nick);
+		super();
 		this.endScore = score;
 		this.endTime = endtime;
 	}
@@ -41,6 +45,7 @@ public class Ranking {
 		
 		String sql = "INSERT INTO TB_RANKING VALUES (rank_seq.NEXTVAL,?,?,SYSDATE)";
 		try {
+			// rank = new Ranking();
 			MemberDTO dto = new MemberDTO();			
 			psmt = conn.prepareStatement(sql);
 			psmt.setString(1, nick);
@@ -58,34 +63,37 @@ public class Ranking {
 		}
 		return result;
 	}
-	
-	//랭킹 글자칸수 정렬
-	public static String padRight(String text, int length) {
-	    int textWidth = 0;
-	    StringBuilder result = new StringBuilder();
-
-	    for (char ch : text.toCharArray()) {
-	        // 한글은 2칸, 영문은 1칸으로 계산
-	        if (Character.toString(ch).matches("[가-힣]")) {
-	            textWidth += 2;  // 한글은 2칸
-	        } else {
-	            textWidth += 1;  // 영문은 1칸
-	        }
-	        result.append(ch);
-	    }
-
-	    // 부족한 공간만큼 공백 추가하여 정확한 너비 맞추기
-	    int padding = length - textWidth;
-	    result.append(" ".repeat(Math.max(0, padding)));
-
-	    return result.toString();
-	}
 
 	/**
 	 * 랭킹출력
 	 * @param result 
 	 * @return
 	 */
+//	public void viewRank(int result) {		
+//		getConn(); //DB접근
+//		
+//		String sql = "SELECT NICK,SCORE,ENDTIME FROM RANKING ORDER BY SCORE DESC LIMIT 50";
+//		try {
+//			psmt = conn.prepareStatement(sql);
+//			rs = psmt.executeQuery();
+//			
+//			System.out.println("========== 팀장을 찾아서 전체랭킹 ==========");
+//			if(rs.next()) {
+//				while(rs.next()) {
+//					System.out.println(this.getNick()+"/t"+this.getEndScore()+"/t"+this.getEndTime());
+//				}
+//			}else {
+//				System.out.println("아직 랭킹이 없어요!");
+//			}
+//
+//			
+//		} catch (SQLException e) {
+//			e.printStackTrace();
+//		} finally {
+//			close();
+//		}
+//	}
+	
 	public int list() {
 		ArrayList<Ranking> resultList = new ArrayList<Ranking>();
 		
@@ -97,24 +105,29 @@ public class Ranking {
 			psmt = conn.prepareStatement(sql); // 샘플쿼리장착
 			rs = psmt.executeQuery(); // 실행메소드
 			
-			result = 1;
-			System.out.println("========== 팀장을 찾아서 랭킹 ==========");
-			System.out.printf("%-4s %-15s %-6s %s%n", "순위", "닉네임", "점수", "날짜/시간");
-			while( rs.next() ) {
-				String nick = rs.getString("nick");
-				int score = rs.getInt("score");
-				String endTime = rs.getString("endtime");
-				
-				resultList.add(new Ranking(nick,score,endTime));
-			}
-			for (int i = 0; i < resultList.size(); i++) {
-			    // 순위: 4칸, 닉네임: 16칸, 점수: 6칸, 날짜/시간: 고정된 길이
-			    System.out.printf("%-4d %-15s %-6d %s%n",
-			        (i + 1),                         
-			        padRight(resultList.get(i).dto.getNick(), 15),  // 닉네임을 20칸 맞춤
-			        resultList.get(i).getEndScore(),
-			        resultList.get(i).getEndTime()
-			    );
+			if(rs.next()) {
+				result = 1;
+				System.out.println("========== 팀장을 찾아서 랭킹 ========== ");
+				System.out.println("닉네임\t점수\t날짜/시간");
+				while( rs.next() ) {
+					String nick = rs.getString("nick");
+					int score = rs.getInt("score");
+					String endTime = rs.getString("endtime");
+					
+					resultList.add(new Ranking(nick,score,endTime));
+
+					System.out.println(nick+"\t"+score+"\t"+endTime);
+				}	
+			}else {
+				result = 0;
+				System.out.println("========== 팀장을 찾아서 랭킹 ========== "
+						+ "\n"
+						+ "\n"
+						+ "\n"
+						+ "      아직 랭킹이 없어요!      "
+						+ "\n"
+						+ "\n"
+						+ "\n");
 			}
 			
 		} catch (SQLException e) {
@@ -125,8 +138,5 @@ public class Ranking {
 		return result;
 	}
 	
-=======
-	private LocalDate endTime;
->>>>>>> f4b10f781e41e7d52c7c5bc037a6bad676f35f61
 	
 }

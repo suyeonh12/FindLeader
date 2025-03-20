@@ -1,5 +1,6 @@
 package Model;
 
+<<<<<<< HEAD
 import java.sql.SQLException;
 
 public class SaveFile extends MemberDAO {
@@ -147,4 +148,11 @@ public class SaveFile extends MemberDAO {
 	
 	
 
+=======
+public class SaveFile{
+	
+	private int stageNum;
+	private int saveScore;
+	
+>>>>>>> f4b10f781e41e7d52c7c5bc037a6bad676f35f61
 }

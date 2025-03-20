@@ -7,9 +7,13 @@ import java.util.*;
 
 import Controller.Controller;
 import Model.Friend;
+import Model.MemberDTO;
+import Model.Ranking;
 import oracle.jdbc.rowset.OracleWebRowSetXmlReader;
 
 public class Main {
+	
+	private static final String[] choices = {"가위", "바위", "보"}; //게임2에 쓰는 거
 
 	public static void main(String[] args) {
 
@@ -17,31 +21,15 @@ public class Main {
 		Scanner sc = new Scanner(System.in);
 		Random ran = new Random();
 		int result = 0;
-
+		
 		Controller control = new Controller();
 		
 		control.Con_gamestart();
 		
 		control.Con_main();
-<<<<<<< HEAD
-=======
-		
-		control.Con_opening();
-		
-		control.Con_stage1();
-		
-		//control.save();
-		
-		control.Con_stage2();
-		
-		//control.save();
-		
-		control.Con_stage3();
 		
 		
 		
-
->>>>>>> f4b10f781e41e7d52c7c5bc037a6bad676f35f61
 	}
 
 }
