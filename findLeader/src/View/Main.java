@@ -17,6 +17,8 @@ public class Main {
 
 		// 공통 필수 유틸 , 변수
 		Scanner sc = new Scanner(System.in);
+		Random ran = new Random();
+		int result = 0;
 
 		Controller control = new Controller();
 		System.out.println("\r\n"
@@ -42,7 +44,7 @@ public class Main {
 				String pw = sc.next();
 
 				// 가입 로직 실행
-				int result = control.Con_join(nick, pw);
+				result = control.Con_join(nick, pw);
 
 				if (result > 0) {
 					System.out.println("가입완료!");
@@ -58,7 +60,7 @@ public class Main {
 				System.out.print("비밀번호 입력 >> ");
 				String pw = sc.next();
 				// 로그인 로직 실행
-				int result = control.Con_login(nick, pw);
+				result = control.Con_login(nick, pw);
 				if (result > 0) {
 					System.out.println("환영합니다, 게임 시작!");
 					break;
@@ -67,7 +69,7 @@ public class Main {
 				}
 			} while (true);
 
-			int score = 100; // 나의 HP
+			int hp = 100; // 나의 HP
 
 			// 게임1 시작(스마트인재개발원, 팀장의 가장 친한 친구 찾기)
 			System.out.println("팀장.. 누구한테 물어봐야하지? 누구랑 친했더라...");
@@ -98,8 +100,8 @@ public class Main {
 	                })
 	            ));
 
-	            Random random = new Random();
-	            Friend correctFriend = friends.get(random.nextInt(friends.size()));
+	            // random = new Random();
+	            Friend correctFriend = friends.get(ran.nextInt(friends.size()));
 	            BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
 	            System.out.println("[GAME1 친구 이름 맞추기]");
@@ -129,14 +131,16 @@ public class Main {
 	                }
 
 	                if (answer == null) {
-	                    System.out.println("\n시간 초과! 다음 힌트로 넘어갑니다.");
+	                	hp-=5;
+	                    System.out.println("\n시간 초과! 다음 힌트로 넘어갑니다. HP: " + hp);
 	                } else if (answer.equals(correctFriend.getName())) {
-	                    points = 10 - hintIndex * 2;
-	                    System.out.println("정답입니다! HP: " + points);
+	                    //points = hintIndex * 2;
+	                    System.out.println("정답입니다! HP: " + hp);
 	                    isCorrect = true;
 	                    break;
 	                } else {
-	                    System.out.println("정답이 아닙니다.");
+	                	hp-=3;
+	                    System.out.println("정답이 아닙니다. HP: " + hp);
 	                }
 
 	                hintIndex++;
@@ -149,7 +153,7 @@ public class Main {
 	            }
 
 	            System.out.println("\n게임 종료!");
-	            System.out.println("남은 HP: " + points);
+	            System.out.println("남은 HP: " + hp);
 
 //	            try {
 //	                br.close();
@@ -159,18 +163,17 @@ public class Main {
 
 			// 게임2 시작(가장친한친구와 가위바위보 -> 이기면 회사로, 지면 집으로 ? )
 			System.out.println("게임 2 시작");
-			
-			Random ran = new Random();
 	    	
 	    	int totalScore = 10;
 	    	int myWins = 0;
 	    	int opponentWins = 0;
 	    	int draws = 0;
+	    	int roundCount = 1;
 	    	
-	    	
+	    	System.out.println();
 	    	System.out.println("=======두 번째 게임 시작=======");
 	    	for(int round = 1; round <= 3; round++) {
-	    		System.out.println("-------"+round+ "번 째 판 -------");
+	    		System.out.println("-------"+roundCount+ "번 째 판 -------");
 	    		System.out.println("안내면 진다 가위, 바위, 보~!");
 	    		String myChoice = sc.next(); // 사용자 입력 받기
 	        	String opponentChoice = choices[ran.nextInt(3)];
@@ -178,44 +181,50 @@ public class Main {
 	        	
 	        
 	        	if(myChoice.equals(opponentChoice)) {
-	        		System.out.println("비겼습니다 ㅠㅠ(점수는 무효!)");
-	        		draws++;
+	        		System.out.println("비겼습니다 ㅠㅠ(점수는 무효!) 남은 HP: " + hp);
+	        		round--;
 	        	} else if((myChoice.equals("가위") && opponentChoice.equals("보") )||
 	        			  (myChoice.equals("바위") && opponentChoice.equals("가위") )||
 	        			  (myChoice.equals("보") && opponentChoice.equals("주먹") )) {
-	        		System.out.println("당신의 승리!!");
+	        		hp+=3;
+	        		System.out.println("당신의 승리!! 남은 HP: " + hp);
 	        		myWins++;
 	        	} else {
-	        		System.out.println("패배했습니다 ㅠㅠㅜ");
+	        		hp-=5;
+	        		System.out.println("패배했습니다 ㅠㅠㅜ 남은 HP: " + hp);
 	        		opponentWins++;
 	        	}
+	        	roundCount++;
 
 	    		System.out.println("남은 기회는 " + (3- round )+"번");
 	    	}
 	    	
-	    		int allRounds = 3- draws;
-	    		
-	    		if(myWins == allRounds ) {
-	    			totalScore = 10;
-	    		} else if (myWins == allRounds-1 ) {
-	    			totalScore = 7;
-	    		} else if (myWins == allRounds-2 ) {
-	    			totalScore = 4;
-	    		} else {
-	    			totalScore = 1;
-	    		}
+//	    		int allRounds = 3 - draws;
+//	    		
+//	    		if(myWins == allRounds ) {
+//	    			totalScore = 10;
+//	    		} else if (myWins == allRounds-1 ) {
+//	    			totalScore = 7;
+//	    		} else if (myWins == allRounds-2 ) {
+//	    			totalScore = 4;
+//	    		} else {
+//	    			totalScore = 1;
+//	    		}
 	    	
+	    	System.out.println();
 	    	System.out.println("======= 게 임 종 료 =======");
 	    	System.out.println("나의 승리: "+ myWins+ "번");
 	    	System.out.println("친구의 승리: "+ opponentWins+"번");
 	    	System.out.println("비긴 게임: "+ draws+ "번");
-	    	System.out.println("최종 점수: "+ totalScore+ "점");
+	    	System.out.println("남은 HP: "+ hp);
+	    	System.out.println();
 
 			// 게임3 시작(팀장을 찾아간 회사에서 경비원과 fight)         
 			// 경비원과 결투를 벌인다
-			int fight = control.Con_fight();
+			int fight = control.Con_fight(hp);
 
 			// 게임종료 후 점수계산해서 저장
+			//result = control.Con_Save(nick, hp, date);
 
 			// 랭킹출력
 

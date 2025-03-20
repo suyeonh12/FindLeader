@@ -101,10 +101,10 @@ public class MemberDAO {
 	}
 	
 	//세번째 게임: 경비원을 이겨라!
-	public int fight() {
+	public int fight(int hp) {
 		int count = 1;
-		int Playerhp = 80;
-		int Enemyhp = 80;
+		int Playerhp = hp;
+		int Enemyhp = Playerhp;
 		while (true) {
 			int com_choice = ran.nextInt(3) + 1;
 			System.out.println(count + "번째 턴입니다.");
@@ -112,27 +112,23 @@ public class MemberDAO {
 			int choice = sc.nextInt();
 			if (com_choice != 1) {
 				System.out.println("경비원의 공격을 피했습니다");
-			}
-			if (com_choice == 1) {
+			}else{
 				System.out.println("경비원의 공격을 피하지 못했습니다. '플레이어' hp -10");
 				Playerhp -= 10;
 			}
 			System.out.println("플레이어 HP : " + Playerhp + " 경비원 HP : " + Enemyhp);
-			if (Playerhp <= 0) {
-				break;
-			}
+
 			System.out.println("당신의 공격! 어느쪽으로 공격하시겠습니까? \n [1] 왼쪽 [2] 오른쪽");
 			choice = sc.nextInt();
 			if (com_choice != 1) {
 				System.out.println("공격이 적중했습니다! '경비원' hp - 10");
 				Enemyhp -= 10;
-			}
-			if (com_choice == 1) {
+			}else{
 				System.out.println("경비원이 공격을 피했습니다");
 			}
 			System.out.println("플레이어 HP : " + Playerhp + " 경비원 HP : " + Enemyhp);
-			if (Enemyhp <= 0) {
-				System.out.println("승리했습니다!");
+			
+			if (Enemyhp <= 0 || Playerhp <= 0) {
 				break;
 			}
 			count++;
