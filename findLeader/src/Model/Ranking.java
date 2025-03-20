@@ -4,6 +4,7 @@ import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
 public class Ranking extends MemberDAO {
@@ -17,7 +18,7 @@ public class Ranking extends MemberDAO {
 	}
 	public Ranking() {
 	}
-	
+
 	public int getEndScore() {
 		return endScore;
 	}
@@ -39,15 +40,22 @@ public class Ranking extends MemberDAO {
 	 * 게임 종료 후 기록 저장
 	 * @return 랭킹에 정보 추가가 됐으면 1, 아니면 0
 	 */
-	public int addRank() {
+	public int addRank(String nick, int hp) {
 		getConn(); //DB접근
 		
 		String sql = "INSERT INTO RANKING VALUES (rank_seq.NEXTVAL,?,?,SYSDATE)";
 		try {
+			// rank = new Ranking();
+			MemberDTO dto = new MemberDTO();			
 			psmt = conn.prepareStatement(sql);
-			psmt.setString(1, this.getNick());
-			psmt.setInt(2, this.getEndScore());
+			psmt.setString(1, nick);
+			psmt.setInt(2, hp);
 			result = psmt.executeUpdate();
+//			if(result > 0) {
+//				System.out.println("랭킹 업데이트 완료!");
+//			}else {
+//				System.out.println("랭킹 업데이트 실패ㅠ");
+//			}
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} finally {
@@ -58,9 +66,10 @@ public class Ranking extends MemberDAO {
 
 	/**
 	 * 랭킹출력
+	 * @param result 
 	 * @return
 	 */
-//	public int printRank() {
+//	public void viewRank(int result) {		
 //		getConn(); //DB접근
 //		
 //		String sql = "SELECT NICK,SCORE,ENDTIME FROM RANKING ORDER BY SCORE DESC LIMIT 50";
@@ -69,35 +78,56 @@ public class Ranking extends MemberDAO {
 //			rs = psmt.executeQuery();
 //			
 //			System.out.println("========== 팀장을 찾아서 전체랭킹 ==========");
-//			while(rs.next()) {
-//				System.out.println(this.getNick()+"/t"+this.getEndScore()+"/t"+this.getEndTime());
+//			if(rs.next()) {
+//				while(rs.next()) {
+//					System.out.println(this.getNick()+"/t"+this.getEndScore()+"/t"+this.getEndTime());
+//				}
+//			}else {
+//				System.out.println("아직 랭킹이 없어요!");
 //			}
+//
 //			
 //		} catch (SQLException e) {
 //			e.printStackTrace();
 //		} finally {
 //			close();
 //		}
-//		return result;
 //	}
 	
-	
-	public ArrayList<Ranking> rank() {
-		ArrayList<Ranking> resultList = new ArrayList<>();
+	public int list() {
+		ArrayList<Ranking> resultList = new ArrayList<Ranking>();
+		
 		getConn(); //DB접속
 		
-		String sql = "SELECT NICK,SCORE,ENDTIME FROM RANKING ORDER BY SCORE DESC LIMIT 50";
+		String sql = "SELECT NICK, SCORE, ENDTIME FROM RANKING ORDER BY SCORE DESC";
 		
 		try {
 			psmt = conn.prepareStatement(sql); // 샘플쿼리장착
 			rs = psmt.executeQuery(); // 실행메소드
 			
-			while( rs.next() ) {
-				String nick = rs.getString("nick");
-				int score = rs.getInt("score");
-				String endtime = rs.getString("endtime");
-				
-				resultList.add(new Ranking(nick,score,endtime));
+			if(rs.next()) {
+				result = 1;
+				System.out.println("========== 팀장을 찾아서 랭킹 ========== ");
+				System.out.println("닉네임\t점수\t날짜/시간");
+				while( rs.next() ) {
+					String nick = rs.getString("nick");
+					int score = rs.getInt("score");
+					String endTime = rs.getString("endtime");
+					
+					resultList.add(new Ranking(nick,score,endTime));
+
+					System.out.println(nick+"\t"+score+"\t"+endTime);
+				}	
+			}else {
+				result = 0;
+				System.out.println("========== 팀장을 찾아서 랭킹 ========== "
+						+ "\n"
+						+ "\n"
+						+ "\n"
+						+ "      아직 랭킹이 없어요!      "
+						+ "\n"
+						+ "\n"
+						+ "\n");
 			}
 			
 		} catch (SQLException e) {
@@ -105,7 +135,7 @@ public class Ranking extends MemberDAO {
 		} finally {
 			close();
 		}
-		return resultList;
+		return result;
 	}
 	
 	

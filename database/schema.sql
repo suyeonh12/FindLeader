@@ -1,5 +1,5 @@
 CREATE TABLE MEMBER(
-    NICK VARCHAR2(50) PRIMARY KEY,
+    NICK VARCHAR2(50) PRIMARY KEY, //글자수 너무 적어서 사이즈 키움
     PW VARCHAR2(20)
 );
 
@@ -18,3 +18,8 @@ CREATE TABLE RANKING(
     CONSTRAINT FK_RANKNICK FOREIGN KEY(NICK) REFERENCES MEMBER(NICK)
 );
 
+CREATE SEQUENCE rank_seq
+START WITH 1      -- 1부터 시작
+INCREMENT BY 1    -- 1씩 증가
+NOCACHE           -- 캐시 없이 실행 (생략 가능)
+NOCYCLE;          -- 최대값에 도달해도 다시 1로 초기화되지 않음
