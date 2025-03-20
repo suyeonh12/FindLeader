@@ -5,12 +5,13 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.InputMismatchException;
 import java.util.Random;
 import java.util.Scanner;
 
 import javax.naming.spi.DirStateFactory.Result;
 
-public class MemberDAO {
+public class MemberDAO extends MemberDTO{
 	
 	//필요 유틸
 	Scanner sc = new Scanner(System.in);
@@ -108,8 +109,16 @@ public class MemberDAO {
 		while (true) {
 			int com_choice = ran.nextInt(3) + 1;
 			System.out.println(count + "번째 턴입니다.");
-			System.out.println("경비원의 공격! 공격을 회피하세요!\n [1] 왼쪽 [2] 오른쪽");
-			int choice = sc.nextInt();
+			System.out.print("경비원의 공격! 공격을 회피하세요!\n [1] 왼쪽 [2] 오른쪽 ");
+	        while (true) { // 올바른 입력이 들어올 때까지 반복
+	            try {
+	                int choice = sc.nextInt(); // 정수 입력 받기
+	                break; // 정상 입력이면 루프 종료
+	            } catch (InputMismatchException e) {
+	                System.out.println("잘못된 입력입니다! 숫자를 입력해주세요.");
+	                sc.nextLine(); // 잘못된 입력값을 제거 (버퍼 비우기)
+	            }
+	        }
 			if (com_choice != 1) {
 				System.out.println("경비원의 공격을 피했습니다");
 			}else{
@@ -118,8 +127,16 @@ public class MemberDAO {
 			}
 			System.out.println("플레이어 HP : " + Playerhp + " 경비원 HP : " + Enemyhp);
 
-			System.out.println("당신의 공격! 어느쪽으로 공격하시겠습니까? \n [1] 왼쪽 [2] 오른쪽");
-			choice = sc.nextInt();
+			System.out.print("당신의 공격! 어느쪽으로 공격하시겠습니까? \n [1] 왼쪽 [2] 오른쪽 ");
+	        while (true) { // 올바른 입력이 들어올 때까지 반복
+	            try {
+	                int choice = sc.nextInt(); // 정수 입력 받기
+	                break; // 정상 입력이면 루프 종료
+	            } catch (InputMismatchException e) {
+	                System.out.println("잘못된 입력입니다! 숫자를 입력해주세요.");
+	                sc.nextLine(); // 잘못된 입력값을 제거 (버퍼 비우기)
+	            }
+	        }
 			if (com_choice != 1) {
 				System.out.println("공격이 적중했습니다! '경비원' hp - 10");
 				Enemyhp -= 10;

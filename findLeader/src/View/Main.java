@@ -3,13 +3,16 @@ package View;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
 import java.util.*;
 
 import Controller.Controller;
 import Model.Friend;
+import Model.Ranking;
 import oracle.jdbc.rowset.OracleWebRowSetXmlReader;
 
-public class Main {
+public class Main{
 	
 	private static final String[] choices = {"가위", "바위", "보"}; //게임2에 쓰는 거
 
@@ -21,6 +24,7 @@ public class Main {
 		int result = 0;
 
 		Controller control = new Controller();
+        
 		System.out.println("\r\n"
 				+ ":::::::::: ::::::::::: ::::    ::: :::::::::   :::        ::::::::::     :::     :::::::::  :::::::::: :::::::::  \r\n"
 				+ ":+:            :+:     :+:+:   :+: :+:    :+:  :+:        :+:          :+: :+:   :+:    :+: :+:        :+:    :+: \r\n"
@@ -37,23 +41,19 @@ public class Main {
 
 		if (input == 1) { // 가입하기
 
-			do {
-				System.out.print("닉네임 입력 >> ");
-				String nick = sc.next();
-				System.out.print("비밀번호 입력 >> ");
-				String pw = sc.next();
+			System.out.print("닉네임 입력 >> ");
+			String nick = sc.next();
+			System.out.print("비밀번호 입력 >> ");
+			String pw = sc.next();
 
-				// 가입 로직 실행
-				result = control.Con_join(nick, pw);
+			// 가입 로직 실행
+			result = control.Con_join(nick, pw);
 
-				if (result > 0) {
-					System.out.println("가입완료!");
-					break;
-				}
-			} while (true);
-
+			if (result > 0) {
+				System.out.println("가입완료!");
+			}
+			
 		} else if (input == 2) { // 게임시작
-			do {
 				// 로그인
 				System.out.print("닉네임 입력 >> ");
 				String nick = sc.next();
@@ -63,11 +63,9 @@ public class Main {
 				result = control.Con_login(nick, pw);
 				if (result > 0) {
 					System.out.println("환영합니다, 게임 시작!");
-					break;
 				} else {
 					System.out.println("로그인 실패ㅠ 다시 입력해주세요.");
 				}
-			} while (true);
 
 			int hp = 100; // 나의 HP
 
@@ -221,12 +219,13 @@ public class Main {
 
 			// 게임3 시작(팀장을 찾아간 회사에서 경비원과 fight)         
 			// 경비원과 결투를 벌인다
-			int fight = control.Con_fight(hp);
+			int fight = control.Con_fight(hp);//fight 결과 hp = fight
 
-			// 게임종료 후 점수계산해서 저장
-			//result = control.Con_Save(nick, hp, date);
+			// 게임종료 후 점수계산해서 랭킹에 업데이트
+			control.Con_addRank(nick, fight);
 
 			// 랭킹출력
+			control.Con_printRank();
 
 		} else if (input == 3) { // 불러오기
 
