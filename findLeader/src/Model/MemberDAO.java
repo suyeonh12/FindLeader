@@ -18,9 +18,7 @@ import javax.naming.spi.DirStateFactory.Result;
 
 import Controller.Controller;
 
-public class MemberDAO {
-scenario scene = new scenario();
-	MemberDTO dto = new MemberDTO();
+public class MemberDAO extends MemberDTO{
 
 	private static final String[] choices = { "가위", "바위", "보" };
 	// 필요 유틸
@@ -33,6 +31,7 @@ scenario scene = new scenario();
 	ResultSet rs = null;
 	int hp = 100;
 	int result = 0; // int형 result 초기값 세팅
+	MemberDTO dto = new MemberDTO();
 
 	// DB 접속
 	public void getConn() {
@@ -142,11 +141,9 @@ scenario scene = new scenario();
 		}
 		return result;
 	}
-	
-	
+
 	public int Con_stage1() {
 		int hp = 100; // 나의 HP
-
 		System.out.println("팀장.. 누구한테 물어봐야하지? 누구랑 친했더라...");
 		System.out.println("게임 START!");
 		System.out.println("팀장과 가장 친한 친구를 찾아라!");
@@ -197,14 +194,13 @@ scenario scene = new scenario();
 			} else if (answer.equals(correctFriend.getName())) {
 				// points = hintIndex * 2;
 				System.out.println("정답입니다! HP: " + hp);
-				scene.scene_chapter_1_1(correctFriend.getName());
 				isCorrect = true;
 				break;
 			} else {
 				hp -= 3;
 				System.out.println("정답이 아닙니다. HP: " + hp);
-				scene.scene_chapter_1_2(correctFriend.getName());
 			}
+
 			hintIndex++;
 		}
 
@@ -281,7 +277,7 @@ scenario scene = new scenario();
 
 	// 세번째 게임: 경비원을 이겨라!
 	public int Con_stage3(int hp) {
-		scene.scene_chapter_3_intro(dto.getNick());
+		System.out.println("야생의 경비원이 나타났다");
 		int count = 1;
 		int Playerhp = hp;
 		int Enemyhp = Playerhp-20;
@@ -297,15 +293,15 @@ scenario scene = new scenario();
 			if (com_choice != 1) {
 				System.out.println("경비원의 공격을 피했습니다");
 			} else {
-				System.out.println("경비원의 공격을 피하지 못했습니다. "+dto.getNick()+" HP -10");
+				System.out.println("경비원의 공격을 피하지 못했습니다. '플레이어' HP -10");
 				Playerhp -= 10;
 			}
-			System.out.println(dto.getNick()+ " HP : " + Playerhp + " 경비원 HP : " + Enemyhp);
+			System.out.println(" HP : " + Playerhp + " 경비원 HP : " + Enemyhp);
 			if (Playerhp <= 0) {
-				scene.scene_chapter_3_2(dto.getNick());
+				System.out.println("패배하였습니다. GAME OVER");
 				break;
 			}
-			System.out.println(dto.getNick()+"의 공격! 어느쪽으로 공격하시겠습니까? \n [1] 왼쪽 [2] 오른쪽");
+			System.out.println("당신의 공격! 어느쪽으로 공격하시겠습니까? \n [1] 왼쪽 [2] 오른쪽");
 			choice = sc.nextInt();
 			if (choice != 1 && choice != 2) {
 				System.out.println("숫자를 잘못 입력했습니다.");
@@ -317,10 +313,9 @@ scenario scene = new scenario();
 			} else {
 				System.out.println("경비원이 공격을 피했습니다");
 			}
-			System.out.println(dto.getNick()+" HP : " + Playerhp + " 경비원 HP : " + Enemyhp);
+			System.out.println("플레이어 HP : " + Playerhp + " 경비원 HP : " + Enemyhp);
 			if (Enemyhp <= 0) {
 				System.out.println("결투에서 승리했습니다! 점수" + Playerhp + "획득!");
-				scene.scene_chapter_3_1(dto.getNick());
 				break;
 			}
 

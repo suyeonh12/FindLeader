@@ -1,10 +1,14 @@
 package Model;
+import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 
-public class Ranking {
+public class Ranking extends MemberDAO {
 	private int endScore;
-<<<<<<< HEAD
 	private String endTime;
 	
 	public Ranking(String nick, int score, String endtime) {
@@ -125,8 +129,5 @@ public class Ranking {
 		return result;
 	}
 	
-=======
-	private LocalDate endTime;
->>>>>>> f4b10f781e41e7d52c7c5bc037a6bad676f35f61
 	
 }
