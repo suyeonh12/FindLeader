@@ -8,12 +8,14 @@ import java.util.Scanner;
 import Model.MemberDAO;
 import Model.MemberDTO;
 import Model.Ranking;
+import Model.SaveFile;
 
 public class Controller {
 	Scanner sc = new Scanner(System.in);
 	MemberDAO dao = new MemberDAO();
 	MemberDTO dto = new MemberDTO();
 	Ranking rank = new Ranking();
+	SaveFile save = new SaveFile();
 	int result = 0; // int형 결과값의 초기 데이터
 	int totalscore = 0; // 최종 점수
 
@@ -33,7 +35,9 @@ public class Controller {
 				if (result > 0) {
 					System.out.println("환영합니다, 게임 시작!");
 					Con_stage1();
+					Con_save();
 					Con_stage2();
+					Con_save();
 					Con_stage3();
 					Con_addRank();
 					Con_viewRank();
@@ -44,7 +48,7 @@ public class Controller {
 				}
 			} else if (input == 3) {
 				// 불러오기
-				System.out.println("저장된 데이터가 있는가?");
+				Con_saveLoad();
 			} else if (input == 4) {
 				// 랭킹확인
 				Con_viewRank();
@@ -74,11 +78,13 @@ public class Controller {
 
 	public int Con_stage1() {
 		result = dao.Con_stage1();
+		save.setSave(dto.getNick(),1,result);
 		return result;
 	}
 
 	public int Con_stage2() {
 		result = dao.Con_stage2(result);
+		save.setSave(dto.getNick(),2,result);
 		return result;
 	}
 
@@ -86,6 +92,7 @@ public class Controller {
 	public int Con_stage3() { // 결투를 시작한다
 		result = dao.Con_stage3(result); //남은 hp
 		rank.setEndScore(result);
+		save.setSave(dto.getNick(),3,result);
 		return result;
 	}
 	
@@ -103,6 +110,16 @@ public class Controller {
 	public int Con_viewRank() {
 		result = rank.list();
 		return result;
+	}
+	
+	/**
+	 */
+	public void Con_save() {
+		save.saveData();
+	}
+	
+	public void Con_saveLoad() {
+		save.loadData();
 	}
 
 }

@@ -85,7 +85,7 @@ public class MemberDAO extends MemberDTO{
 	public int join(MemberDTO dto) {
 		getConn(); // DB접근
 
-		String sql = "INSERT INTO MEMBER VALUES (?,?)";
+		String sql = "INSERT INTO TB_MEMBER VALUES (?,?)";
 
 		try {
 			System.out.print("닉네임 입력 >> ");
@@ -114,7 +114,7 @@ public class MemberDAO extends MemberDTO{
 	public int login(MemberDTO dto) {
 		getConn(); // DB접근
 
-		String sql = "SELECT * FROM MEMBER WHERE NICK=? AND PW=?";
+		String sql = "SELECT * FROM TB_MEMBER WHERE NICK=? AND PW=?";
 
 		try {
 			System.out.print("닉네임 입력 >> ");
@@ -215,7 +215,6 @@ public class MemberDAO extends MemberDTO{
 		return hp;
 	}
 	
-
 	public int Con_stage2(int hp) {
 		System.out.println("게임 2 시작");
 		
